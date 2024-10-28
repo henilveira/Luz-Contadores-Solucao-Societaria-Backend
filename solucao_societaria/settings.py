@@ -73,17 +73,14 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Adicionar no topo
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    'apps.accounts.api.middleware.TokenRefreshMiddleware',
-
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'solucao_societaria.urls'
@@ -149,17 +146,28 @@ AUTH_USER_MODEL = 'accounts.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+## Configurações de CORS
+CORS_ALLOW_CREDENTIALS = True  # Permitir o envio de credenciais (cookies, etc.)
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
-CORS_ALLOW_CREDENTIALS = True
-
-
-CNPJ_API_KEY = os.getenv('CNPJ_API_KEY')
-CNPJ_API_URL = os.getenv('CNPJ_API_URL')
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    'http://localhost:3000',  # Permitir o frontend de localhost
 ]
 
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'authorization',
+    'content-type',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+]
+
+# CSRF settings
+CSRF_COOKIE_SAMESITE = 'None'  # Permitir cross-site
+CSRF_COOKIE_SECURE = True  # Isso deve ser habilitado em produção com HTTPS
